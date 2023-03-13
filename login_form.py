@@ -46,8 +46,8 @@ class LogInForm:
                         self.parent.close()
                         AdminPage().run()
                 else:
-                    sg.PopupNoWait("WRONG !!!!", title="IDIOT", keep_on_top=True)
-                    Utils.open_ltg()
+                    sg.PopupNoWait("Incorrect email or password", title="Login failed", keep_on_top=True)
+                    # Utils.open_ltg()
             elif event == "forgot_pass":
                 window.hide()
                 ForgotPass().run()

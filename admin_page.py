@@ -57,7 +57,7 @@ class AdminPage:
 
     def _formation_layout(self):
         layout = [
-            [sg.Frame("Math formulation", layout=[
+            [sg.Frame("Teacher allocation", layout=[
                 [sg.Multiline(size=(80, 20), key="formation_text")],
             ])],
             [sg.Input(key="doc"), sg.FileBrowse()],
@@ -88,7 +88,7 @@ class AdminPage:
                 window["solve_time"].update(round(end_t - start_t, 3))
                 s, mc = Utils().dict_to_str(res["dic"])
                 window["formation_text"].update(value=s,  append=True)
-                window["form_canvas"].draw_image(filename='form.png', location=(0, 0))
+                # window["form_canvas"].draw_image(filename='form.png', location=(0, 0))
 
             # window["output1"].update(values["input1"])
 
