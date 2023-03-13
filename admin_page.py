@@ -1,5 +1,7 @@
 import PySimpleGUI as sg
 from utils import Utils
+import time 
+from solver import Solver
 
 
 class AdminPage:
@@ -19,8 +21,7 @@ class AdminPage:
     def _advanced_layout(self):
         layout = [
             [sg.Frame("Math formulation", layout=[
-                [sg.Canvas(background_color='white', size=(
-                    600, 400), key="add_teacher_canvas")],
+                [sg.Image(filename="form.png", size= (480, 400), key="formulation")],
             ]),
                 sg.Frame("Stuff", layout=[
                     [sg.Text("Choose an algorithm")],
@@ -39,14 +40,13 @@ class AdminPage:
             [sg.Text("Number of students: "), sg.Text("0", key="n_students")],
             [sg.Text("Number of constraints: "),
              sg.Text("0", key="n_constraints")],
-            [sg.Text("Number of lessons: "), sg.Text("0", key="n_lessons")],
             [sg.Button("Export as", key="export_as")],
             [sg.Button("Simulate", key="simulate")],
         ]
         return layout
 
     def _layout(self):
-        layout = [[sg.Menu([['File', ['Exit']], ['Edit', ['Edit Me', ]]],  k='-CUST MENUBAR-',p=0)],
+        layout = [[sg.Menu([['File', ["Add file", 'Exit']], ['Edit', ['Edit Me', ]]],  k='-CUST MENUBAR-',p=0)],
                   [sg.TabGroup([[sg.Tab('Data', self._data_layout()),
                                  sg.Tab("Advanced", self._advanced_layout()),
                                  sg.Tab("Statistics", self._statistics_layout()),
@@ -58,8 +58,12 @@ class AdminPage:
     def _formation_layout(self):
         layout = [
             [sg.Frame("Math formulation", layout=[
-                [Utils.make_dummy_table()],
-            ])]]
+                [sg.Multiline(size=(80, 20), key="formation_text")],
+            ])],
+            [sg.Input(key="doc"), sg.FileBrowse()],
+            [sg.Button("solve", key="solve_model")],
+            [sg.Text("Model solve status: "), sg.Text("0", key="solve_status")],
+            [sg.Text('Solving time: '), sg.Text("0", key="solve_time")],]
 
         return layout
 
@@ -71,6 +75,21 @@ class AdminPage:
             event, values = window.read()
             if event == sg.WINDOW_CLOSED or event == "Quit":
                 break
+            elif event == "solve_model":
+                doc = values["doc"]
+                start_t = time.time()
+                res = Solver().solve(doc)
+                end_t = time.time()
+                window["n_teachers"].update(len(res["teachers"]))
+                window["n_subjects"].update(len(res["classes"]))
+                window["n_classes"].update(len(res["classes_levels"]))
+                window["n_constraints"].update(len(res["model"].constraints))
+                window["solve_status"].update(res["status"])
+                window["solve_time"].update(round(end_t - start_t, 3))
+                s, mc = Utils().dict_to_str(res["dic"])
+                window["formation_text"].update(value=s,  append=True)
+                window["form_canvas"].draw_image(filename='form.png', location=(0, 0))
+
             # window["output1"].update(values["input1"])
 
         window.close()

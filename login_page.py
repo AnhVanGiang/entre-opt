@@ -12,18 +12,10 @@ class LogInPage:
             [sg.Button("Admin login", size=(10, 2), key="admin_login")],
         ], vertical_alignment="center", justification="center")
 
-        col_learn_more = sg.Column([
-            [sg.Button("Learn more about us"), sg.Button("Forgot password", key="forgot_pass")],
-        ], vertical_alignment="left", justification="left")
-
-        col_tutorial = sg.Column([
-            [sg.Button("Tutorial", size=(6, 2))],
-        ], vertical_alignment="center", justification="right")
 
         layout = [
-            [col_tutorial],
             [col_logins],
-            [col_learn_more],
+            [[sg.Button("Learn more about us"), sg.Button("Tutorial")]],
         ]
 
         return layout
@@ -37,8 +29,8 @@ class LogInPage:
                 break
             elif event == "teacher_login":
                 LogInForm(login_type="teacher", parent=window).run()
-            elif event == "Admin login":
-                pass
+            elif event == "admin_login":
+                LogInForm(login_type="admin", parent=window).run()
             elif event == "Learn more about us":
                 pass
             # window["output1"].update(values["input1"])

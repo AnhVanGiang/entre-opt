@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 from forgot_pass import ForgotPass
 from utils import Utils
 from teacher_page import TeacherPage
+from admin_page import AdminPage
 
 class LogInForm:
     def __init__(self, login_type, parent) -> None:
@@ -9,7 +10,7 @@ class LogInForm:
         self.parent = parent
 
     def _check_password(self, email, password):
-        if email == "deez" and password == "nutz":
+        if email == "joe" and password == "mama":
             return True
         return False
 
@@ -40,6 +41,10 @@ class LogInForm:
                         window.close()
                         self.parent.close()
                         TeacherPage().run()
+                    elif self.login_type == "admin":
+                        window.close()
+                        self.parent.close()
+                        AdminPage().run()
                 else:
                     sg.PopupNoWait("WRONG !!!!", title="IDIOT", keep_on_top=True)
                     Utils.open_ltg()
